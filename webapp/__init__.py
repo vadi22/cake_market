@@ -4,6 +4,7 @@ from webapp.forms import LoginForm, RegistrationForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from webapp.models import db, User
 from flask_migrate import Migrate
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
@@ -74,10 +75,13 @@ def create_app():
             db.session.commit()
             flash('Вы успешно зарегистрировались!')
             return redirect(url_for('login'))
-        flash('Пожалуйста, исправьте ошибки в форме')
-        return redirect(url_for('register'))
-    
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash('Ошибка в поле "{}": - {}'.format(getattr(form, field).label.text, error))
+            return redirect(url_for('register'))
     return app
+
 
 
 
