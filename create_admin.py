@@ -6,9 +6,9 @@ from webapp.models import User, db
 
 app = create_app()
 with app.app_context():
-    username = input('Введите имя пользователя: ')
+    email = input('Введите свою почту: ')
 
-    if User.query.filter(User.username == username).count():
+    if User.query.filter(User.email == email).count():
         print('Такой пользователь уже есть')
         sys.exit(0)
 
@@ -19,7 +19,7 @@ with app.app_context():
 
     email = 'admin'
 
-    new_user = User(username=username, role=1, email = 'admin', telegram_id ='admin')
+    new_user = User(email=email, active =  True, role=1, telegram_id ='admin')
     new_user.set_password(password)
     email = 'admin'
 

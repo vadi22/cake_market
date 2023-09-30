@@ -9,8 +9,9 @@ ROLE_ADMIN = 1
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
-    username =db.Column(db.String(64), index = True, unique = True)
+    password =db.Column(db.String(128), index = True, unique = True)
     email = db.Column(db.String(120), index = True, unique = True)
+    active = db.Column(db.Boolean())
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     telegram_id = db.Column(db.String(120), index = True, unique = True)
 
