@@ -6,7 +6,7 @@ my_env
 
 # C extensions
 *.so
-
+run.bat
 # Distribution / packaging
 .Python
 build/
