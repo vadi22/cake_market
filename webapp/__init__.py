@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-from webapp.models import db, User
+from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
 from webapp.forms import LoginForm, RegistrationForm
 
 def create_app():

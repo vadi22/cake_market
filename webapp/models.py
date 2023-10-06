@@ -27,18 +27,70 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<Email= {} id={}>'.format(self.email, self.id)
 
-class Product(db.Model, UserMixin):
+class Product(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), index = True, unique = True)
-    description =db.Column(db.String(400))
+    description = db.Column(db.String(400))
     labor_id = db.Column(db.SmallInteger)
 
     def __repr__(self):
         return '<Product= {} id={}>'.format(self.name, self.id)
+    
+class Component(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120), index = True, unique = True)
+    description = db.Column(db.String(400))
+    
+    def __repr__(self):
+        return '<Component {} id={}>'.format(self.name, self.id)
+    
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    link = db.Column(db.String(120), unique = True)
+    
+    def __repr__(self):
+        return '<Image id={} link={}>'.format(self.id, self.link)
+    
+class Price(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    component_id = db.Column(db.Integer, index = True)
+    cost = db.Column(db.Numeric(7,2))
+    discount = db.Column(db.Numeric(3,2))
 
+    def __repr__(self):
+        return '<Price id={} component_id={} cost={} discount={}>'.format(self.id, self.component_id, self.cost, self.discount)
+    
+class Labor(db.Model): 
+    id = db.Column(db.Integer, primary_key = True)
+    hours = db.Column(db.Numeric(3,2))
+    cost = db.Column(db.Numeric(7,2))
 
+    def __repr__(self):
+        return '<Labor id={} hours={} cost={}>'.format(self.id, self.hours, self.cost)
+    
+class Product_Component(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    product_id = db.Column(db.Integer, index = True)
+    component_id = db.Column(db.Integer, index = True)
+    
+    def __repr__(self):
+        return '<Product_Component id={}>'.format(self.id)
 
+class Product_Image(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    product_id = db.Column(db.Integer, index = True)
+    image_id =db.Column(db.Integer, index = True)
+    
+    def __repr__(self):
+        return '<Product_Image id={}>'.format(self.id)
 
+class Component_Image(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    component_id = db.Column(db.Integer, index = True)
+    image_id =db.Column(db.Integer, index = True)
+    
+    def __repr__(self):
+        return '<Component_Image id={}>'.format(self.id)
 
 
 
