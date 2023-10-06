@@ -27,6 +27,17 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<Email= {} id={}>'.format(self.email, self.id)
 
+class Product(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120), index = True, unique = True)
+    description =db.Column(db.String(400))
+    labor_id = db.Column(db.SmallInteger)
+
+    def __repr__(self):
+        return '<Product= {} id={}>'.format(self.name, self.id)
+
+
+
 
 
 
