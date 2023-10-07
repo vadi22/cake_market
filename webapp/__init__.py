@@ -2,10 +2,9 @@ from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+from webapp.admin import AdminView, MyAdminIndexView
 from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
 from webapp.forms import LoginForm, RegistrationForm
-from flask_security import SQLAlchemySessionUserDatastore, Security
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
@@ -100,14 +99,16 @@ def create_app():
         #     posts = posts)
         
 
-    admin = Admin(app)
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Product, db.session))
-    admin.add_view(ModelView(Component, db.session))
-    admin.add_view(ModelView(Image, db.session))
-    admin.add_view(ModelView(Price, db.session))
-    admin.add_view(ModelView(Product_Image, db.session))
-    admin.add_view(ModelView(Component_Image, db.session))
+    admin = Admin(app, index_view=MyAdminIndexView())
+    admin.add_view(AdminView(User, db.session))
+    admin.add_view(AdminView(Product, db.session))
+    admin.add_view(AdminView(Component, db.session))
+    admin.add_view(AdminView(Image, db.session))
+    admin.add_view(AdminView(Price, db.session))
+    admin.add_view(AdminView(Labor, db.session))
+    admin.add_view(AdminView(Product_Component, db.session))
+    admin.add_view(AdminView(Product_Image, db.session))
+    admin.add_view(AdminView(Component_Image, db.session))
 
 
 
