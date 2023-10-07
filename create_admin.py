@@ -17,11 +17,11 @@ with app.app_context():
     if not password == password2:
         sys.exit(0)
 
-    email = 'admin'
+   
 
-    new_user = User(email=email, active =  True, role=1, telegram_id ='admin')
+    new_user = User(email=email, active =  True, role=1)
     new_user.set_password(password)
-    email = 'admin'
+   
 
     db.session.add(new_user)
     db.session.commit()
