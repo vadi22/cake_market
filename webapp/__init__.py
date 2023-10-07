@@ -6,7 +6,7 @@ from webapp.admin import AdminView, MyAdminIndexView
 from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
 from webapp.forms import LoginForm, RegistrationForm
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+
 
 
 def create_app():
@@ -86,17 +86,7 @@ def create_app():
                     flash('Ошибка в поле "{}": - {}'.format(getattr(form, field).label.text, error))
             return redirect(url_for('register'))
         
-    @app.route('/user/<email>')
-    @login_required
-    def user(email):
-        user = User.query.filter_by(email = email).first()
-        if user == None:
-            flash('User ' + email + ' not found.')
-            return redirect(url_for('index'))
-        return 'привет'
-        # return render_template('user.html',
-        #     user = user,
-        #     posts = posts)
+
         
 
     admin = Admin(app, index_view=MyAdminIndexView())
