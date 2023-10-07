@@ -1,9 +1,10 @@
 from flask import Flask, render_template, flash, redirect, url_for
-from webapp.models import db
-from webapp.forms import LoginForm, RegistrationForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from webapp.models import db, User
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
+from webapp.forms import LoginForm, RegistrationForm
 
 def create_app():
     app = Flask(__name__)
