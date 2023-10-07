@@ -2,6 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+
+
 db = SQLAlchemy()
 
 ROLE_USER = 0
@@ -15,6 +18,8 @@ class User(db.Model, UserMixin):
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     telegram_id = db.Column(db.String(120), index = True, unique = True)
 
+    
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
     def check_password(self, password):
@@ -26,6 +31,8 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<Email= {} id={}>'.format(self.email, self.id)
+    
+
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key = True)
