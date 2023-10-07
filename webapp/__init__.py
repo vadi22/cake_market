@@ -5,12 +5,17 @@ from flask_migrate import Migrate
 
 from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
 from webapp.forms import LoginForm, RegistrationForm
+from flask_security import SQLAlchemySessionUserDatastore, Security
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
     migrate = Migrate(app, db)
+    
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -81,6 +86,32 @@ def create_app():
                 for error in errors:
                     flash('Ошибка в поле "{}": - {}'.format(getattr(form, field).label.text, error))
             return redirect(url_for('register'))
+        
+    @app.route('/user/<email>')
+    @login_required
+    def user(email):
+        user = User.query.filter_by(email = email).first()
+        if user == None:
+            flash('User ' + email + ' not found.')
+            return redirect(url_for('index'))
+        return 'привет'
+        # return render_template('user.html',
+        #     user = user,
+        #     posts = posts)
+        
+
+    admin = Admin(app)
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Product, db.session))
+    admin.add_view(ModelView(Component, db.session))
+    admin.add_view(ModelView(Image, db.session))
+    admin.add_view(ModelView(Price, db.session))
+    admin.add_view(ModelView(Product_Image, db.session))
+    admin.add_view(ModelView(Component_Image, db.session))
+
+
+
+
     return app
 
 
