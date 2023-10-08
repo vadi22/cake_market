@@ -20,4 +20,14 @@ class RegistrationForm(FlaskForm):
         users_count = User.query.filter_by(email=email.data).count()
         if users_count > 0:
             raise ValidationError('Пользователь с такой электронной почтой уже зарегистрирован')
+        
+
+class AddressForm(FlaskForm):
+    city = StringField('Город', validators=[DataRequired()], render_kw={"class": "form-control"})
+    district = StringField('Район', validators=[DataRequired()], render_kw={"class": "form-control"})
+    street = StringField('Улица', validators=[DataRequired()], render_kw={"class": "form-control"})
+    home = StringField('Дом', validators=[DataRequired()], render_kw={"class": "form-control"})
+    apartment = StringField('Дом', validators=[DataRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Сохранить',render_kw={"class": "btn btn-primary"})
+
 

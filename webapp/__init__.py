@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -103,6 +103,50 @@ def create_app():
 
 
 
+    @app.route('/user/<int:user_id>')
+    @login_required
+    def user_profile(user_id):
+        user = User.query.filter(User.id == user_id).first_or_404()
+        if current_user != user:
+            abort(404)
+        return render_template(
+            'user_profile.html', 
+                user=user, 
+                page_title = 'Личный кабинет'
+        )
+    
+
+    @app.route('/user/<int:user_id>/edit_profile')
+    @login_required
+    def edit_profile(user_id):
+        user = User.query.filter(User.id == user_id).first_or_404()
+        if current_user != user:
+            abort(404)
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            new_user = User(email=form.email.data)
+            new_user.set_password(form.password.data)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Вы успешно зарегистрировались!')
+            return redirect(url_for('login'))
+
+        return render_template(
+            'edit_profile.html',
+            user=user,
+            page_title = 'Адрес доставки',
+        )
+        
+
+    # @app.route('/user/<email')
+    # @login_required
+    # def user(email):
+    #     user = User.query.filter_by(email = email).first()
+    #     if user == None:
+    #         flash('User ' + email + ' not found.')
+    #         return redirect(url_for('index'))
+    #     return render_template('user_profile.html', user = user, page_title = 'Личный кабинет')   
+    
     return app
 
 
