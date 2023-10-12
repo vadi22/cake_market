@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, InputRequired
 from webapp.models import User
 
 
@@ -23,11 +23,11 @@ class RegistrationForm(FlaskForm):
         
 
 class AddressForm(FlaskForm):
-    city = StringField('Город', validators=[DataRequired()], render_kw={"class": "form-control"})
-    district = StringField('Район', validators=[DataRequired()], render_kw={"class": "form-control"})
-    street = StringField('Улица', validators=[DataRequired()], render_kw={"class": "form-control"})
-    home = StringField('Дом', validators=[DataRequired()], render_kw={"class": "form-control"})
-    apartment = StringField('Дом', validators=[DataRequired()], render_kw={"class": "form-control"})
-    submit = SubmitField('Сохранить',render_kw={"class": "btn btn-primary"})
+    city = StringField('Город', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    district = StringField('Район', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    street = StringField('Улица', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    home = StringField('Дом', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    apartment = StringField('Квартира', validators=[InputRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Сохранить', validators=[InputRequired()], render_kw={"class": "btn btn-primary"})
 
 

@@ -3,11 +3,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from webapp.admin import AdminView, MyAdminIndexView
-from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
-from webapp.forms import LoginForm, RegistrationForm
 from flask_admin import Admin
-
-
+from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image, User_adress
+from webapp.forms import LoginForm, RegistrationForm, AddressForm
 
 def create_app():
     app = Flask(__name__)
@@ -107,35 +105,47 @@ def create_app():
     @login_required
     def user_profile(user_id):
         user = User.query.filter(User.id == user_id).first_or_404()
+        adress = User_adress.query.filter(User_adress.user_id == user_id).first_or_404()
         if current_user != user:
             abort(404)
         return render_template(
             'user_profile.html', 
                 user=user, 
-                page_title = 'Личный кабинет'
+                page_title = 'Личный кабинет',
+                adress = adress,
         )
     
 
-    @app.route('/user/<int:user_id>/edit_profile')
+    @app.route('/user/<int:user_id>/edit_profile', methods=['GET', 'POST'])
     @login_required
     def edit_profile(user_id):
         user = User.query.filter(User.id == user_id).first_or_404()
         if current_user != user:
             abort(404)
-        form = RegistrationForm()
-        if form.validate_on_submit():
-            new_user = User(email=form.email.data)
-            new_user.set_password(form.password.data)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Вы успешно зарегистрировались!')
-            return redirect(url_for('login'))
+        form = AddressForm()
+        title = "Регистрация"
+        return render_template('edit_profile.html', form=form)
+    
+    @app.route('/edit_adress', methods=['GET', 'POST'])
+    def edit_adress():
+        form = AddressForm()
+        new_adress = User_adress(city=form.city.data, district=form.district.data, street=form.street.data, home=form.home.data, apartment=form.apartment.data, user_id=current_user.id)
+        db.session.add(new_adress)
+        db.session.commit()
+        flash('Адрес принят')
+        return redirect(url_for('user_profile', user_id=current_user.id))
+    
 
-        return render_template(
-            'edit_profile.html',
-            user=user,
-            page_title = 'Адрес доставки',
-        )
+        # # if form.validate_on_submit():
+        # new_adress = User_adress(city=form.city.data, district=form.district.data, street=form.street.data, home=form.home.data, apartment=form.apartment.data, user_id=current_user.id)
+        # db.session.add(new_adress)
+        # db.session.commit()
+        # flash('Адрес принят')
+        # return redirect(url_for('user_profile', user_id=user.id))
+        # # else:
+        # #     flash('Адрес не принят')
+        # #     return redirect(url_for('user_profile', user_id=user.id ))
+
         
 
     # @app.route('/user/<email')
