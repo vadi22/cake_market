@@ -41,7 +41,6 @@ class User_adress(db.Model):
     street = db.Column(db.String(120))
     home = db.Column(db.String(120))
     apartment = db.Column(db.String(120))
-    submit = db.Column(db.String(120))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), index=True)
 
     def __repr__(self):
