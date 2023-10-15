@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
 
     
 
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
     def check_password(self, password):
@@ -33,6 +34,18 @@ class User(db.Model, UserMixin):
         return '<Email= {} id={}>'.format(self.email, self.id)
     
 
+class User_adress(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    city = db.Column(db.String(120))
+    district = db.Column(db.String(120))
+    street = db.Column(db.String(120))
+    home = db.Column(db.String(120))
+    apartment = db.Column(db.String(120))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), index=True)
+
+    def __repr__(self):
+            return '<User_adress= {} id={}>'.format(self.name, self.id)
+        
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key = True)

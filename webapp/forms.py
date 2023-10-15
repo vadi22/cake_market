@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, InputRequired
 from webapp.models import User
 
 
@@ -20,4 +20,14 @@ class RegistrationForm(FlaskForm):
         users_count = User.query.filter_by(email=email.data).count()
         if users_count > 0:
             raise ValidationError('Пользователь с такой электронной почтой уже зарегистрирован')
+        
+
+class AddressForm(FlaskForm):
+    city = StringField('Город', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    district = StringField('Район', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    street = StringField('Улица', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    home = StringField('Дом', validators=[InputRequired()],  render_kw={"class": "form-control"})
+    apartment = StringField('Квартира', validators=[InputRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Сохранить', validators=[InputRequired()], render_kw={"class": "btn btn-primary"})
+
 

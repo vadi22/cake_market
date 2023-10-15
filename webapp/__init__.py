@@ -1,13 +1,11 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from webapp.admin import AdminView, MyAdminIndexView
-from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
-from webapp.forms import LoginForm, RegistrationForm
 from flask_admin import Admin
-
-
+from webapp.models import db, User, Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image, User_adress
+from webapp.forms import LoginForm, RegistrationForm, AddressForm
 
 def create_app():
     app = Flask(__name__)
@@ -54,13 +52,7 @@ def create_app():
         flash('Вы успешно разлогинились')
         return redirect(url_for('index'))
     
-    @app.route('/admin')
-    @login_required
-    def admin_index():
-        if current_user.is_admin:
-            return 'Привет админ'
-        else:
-            return 'Ты не админ!'
+
         
     @app.route('/register')
     def register():
@@ -91,6 +83,7 @@ def create_app():
 
     admin = Admin(app, index_view=MyAdminIndexView())
     admin.add_view(AdminView(User, db.session))
+    admin.add_view(AdminView(User_adress, db.session))
     admin.add_view(AdminView(Product, db.session))
     admin.add_view(AdminView(Component, db.session))
     admin.add_view(AdminView(Image, db.session))
@@ -103,6 +96,44 @@ def create_app():
 
 
 
+    @app.route('/<int:user_id>')
+    @login_required
+    def user_profile(user_id):
+        user = User.query.filter(User.id == user_id).first_or_404()
+        adress = User_adress.query.filter(User_adress.user_id == user_id).first()
+        if current_user != user:
+            abort(404)
+        return render_template(
+            'user_profile.html', 
+                user=user, 
+                page_title = 'Личный кабинет',
+                adress = adress,
+        )
+    
+
+    @app.route('/<int:user_id>/edit_profile', methods=['GET'])
+    @login_required
+    def edit_profile(user_id):
+        user = User.query.filter(User.id == user_id).first_or_404()
+        if current_user != user:
+            abort(404)
+        form = AddressForm()
+        title = "Регистрация"
+        return render_template('edit_profile.html', form=form)
+    
+    @app.route('/edit_adress', methods=['GET', 'POST'])
+    def edit_adress():
+        form = AddressForm()
+        adress = User_adress.query.filter(User_adress.user_id == current_user.id).first()
+        if adress:
+            db.session.delete(adress)
+        adress = User_adress(city=form.city.data, district=form.district.data, street=form.street.data, home=form.home.data, apartment=form.apartment.data, user_id=current_user.id)
+        db.session.add(adress)
+        db.session.commit()
+        flash('Адрес принят')
+        return redirect(url_for('user_profile', user_id=current_user.id))
+    
+    
     return app
 
 
