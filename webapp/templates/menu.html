@@ -9,11 +9,11 @@
       <a class="nav-item nav-link active" href="{{ url_for('index')}}">Главная страница </a>
       <a class="nav-item nav-link" href="#">Корзина</a>
       {% if current_user.is_authenticated %}
-        <a class="nav-item nav-link" href="{{ url_for('user_profile', user_id=current_user.id)}}">Профиль</a>
-        <a class="nav-item nav-link" href="{{ url_for('logout')}}">Выйти из профиля</a>
+        <a class="nav-item nav-link" href="{{ url_for('user.user_profile', user_id=current_user.id)}}">Профиль</a>
+        <a class="nav-item nav-link" href="{{ url_for('user.logout')}}">Выйти из профиля</a>
       {% else %}
-        <a class="nav-item nav-link" href="{{ url_for('login')}}">Войти в профиль</a>
-        <a class="nav-item nav-link" href="{{ url_for('register')}}">Регистрация</a>
+        <a class="nav-item nav-link" href="{{ url_for('user.login')}}">Войти в профиль</a>
+        <a class="nav-item nav-link" href="{{ url_for('user.register')}}">Регистрация</a>
       {% endif %}
 
 
