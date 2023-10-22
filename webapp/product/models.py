@@ -1,5 +1,5 @@
 from webapp.db import db
-
+from sqlalchemy.orm import relationship
 
 class Labor(db.Model): 
     id = db.Column(db.Integer, primary_key = True)
@@ -14,7 +14,9 @@ class Product(db.Model):
     name = db.Column(db.String(120), index = True, unique = True)
     description = db.Column(db.String(400))
     labor_id = db.Column(db.SmallInteger, db.ForeignKey(Labor.id), index=True)
-
+    product_images = relationship("Product_Image", lazy="joined")
+    product_labor = relationship("Labor", lazy="joined")
+    product_component = relationship("Product_Component", lazy="joined")
     def __repr__(self):
         return '<Product= {} id={}>'.format(self.name, self.id)
     
@@ -22,7 +24,8 @@ class Component(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), index = True, unique = True)
     description = db.Column(db.String(400))
-    
+    price = relationship("Price", lazy="joined")
+
     def __repr__(self):
         return '<Component {} id={}>'.format(self.name, self.id)
     
@@ -46,6 +49,8 @@ class Product_Component(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     product_id = db.Column(db.Integer, db.ForeignKey(Product.id), index = True, nullable = False)
     component_id = db.Column(db.Integer, db.ForeignKey(Component.id), index = True, nullable = False)
+    components = relationship("Component", lazy="joined")
+
     
     def __repr__(self):
         return '<Product_Component id={}>'.format(self.id)
@@ -54,7 +59,7 @@ class Product_Image(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     product_id = db.Column(db.Integer, db.ForeignKey(Product.id), index = True, nullable = False)
     image_id =db.Column(db.Integer, db.ForeignKey(Image.id), index = True, nullable = False)
-    
+    images = relationship("Image", lazy="joined")
     def __repr__(self):
         return '<Product_Image id={}>'.format(self.id)
 
