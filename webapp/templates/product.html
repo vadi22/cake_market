@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+      <h1>{{ product.name }}</h1>
+      <br>
+      <div class='row'>
+          <div class='col-6'>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              <div class="alert alert-warning" role="alert">
+                {% for message in messages %}
+                  {{ message }}<br>
+                {% endfor %}
+              </div>
+              {% endif %}
+            {% endwith %}
+          {% for image in images %}
+            <img src="../static/{{ image.link }}"></a>
+          {% endfor %}<br><br>
+          <h4>{{ product.description }}</h4>
+          <br>
+          <h3>Цена {{ product_cost }} рублей</h3>
+          <h3>Время изготовления (часов): {{ production_time }}</h3>
+        </div>
+      </div>
+{% endblock %}
