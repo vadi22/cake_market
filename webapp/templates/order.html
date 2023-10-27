@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+      <h4>Заказ {{ order.id }}</h4>
+          <div class='col-12'>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              <div class="alert alert-warning" role="alert">
+                {% for message in messages %}
+                  {{ message }}<br>
+                {% endfor %}
+              </div>
+              {% endif %}
+            {% endwith %}
+        </div>
+{% endblock %}

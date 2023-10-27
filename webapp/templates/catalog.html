@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
     {% for product in products %}
-        <div class="card" style="width: 18rem;">
-            {% for image in product.product_images %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                {% for image in product.product_images %}
 
-                <img src="../static/{{ image.images.link }}" class="card-img-top" alt="..."></a>
-            {% endfor %}
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <!-- <p class="card-text">{{ product.description }}</p> -->
-                <a href="/product/{{ product.id }}" class="btn btn-primary">Подробнее</a>
-            </div>
+                    <img src="../static/{{ image.images.link }}" class="card-img-top" alt="..."></a>
+                {% endfor %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <!-- <p class="card-text">{{ product.description }}</p> -->
+                    <a href="/product/{{ product.id }}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div><br>
         </div>
-        <br><br>
+        <br>
     {% endfor %}
+</div>
 {% endblock %}
