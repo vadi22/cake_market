@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-      <h1>{{ product.name }}</h1>
-      <br>
-      <div class='row'>
-          <div class='col-6'>
+<a href="{{ url_for('product.catalog') }}">Назад</a>
+      <h4>{{ product.name }}</h4>
+          <div class='col-12'>
             {% with messages = get_flashed_messages() %}
               {% if messages %}
               <div class="alert alert-warning" role="alert">
@@ -14,12 +13,26 @@
               {% endif %}
             {% endwith %}
           {% for image in images %}
-            <img src="../static/{{ image.link }}"></a>
+            <img src="../static/{{ image.link }}" class="img-fluid max-width: 100%; height: auto;"></a>
           {% endfor %}<br><br>
-          <h4>{{ product.description }}</h4>
-          <br>
-          <h3>Цена {{ product_cost }} рублей</h3>
-          <h3>Время изготовления (часов): {{ production_time }}</h3>
+          <h5>{{ product.description }}</h5>
+          <h5>Время изготовления (часов): {{ production_time }}</h5>
+          <p>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+              aria-controls="collapseExample">
+              Компоненты
+            </a>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <ul>
+                {% for component in components_list %}
+                <li>{{ component }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <h4>Цена {{ product_cost }} рублей</h4>
+
         </div>
-      </div>
 {% endblock %}
