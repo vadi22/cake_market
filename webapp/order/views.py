@@ -15,8 +15,22 @@ def orders():
     return render_template('orders.html',orders=orders)
 
 
+@blueprint.route('/order')
+def order_view():
+    print(1)
+     # Проверяем, есть ли заказ у текущего пользователя?
+    current_order = Order.query.join(User).filter(User.id == current_user.id).first()
+    # Если заказ есть, то пока просто отображаем страницу заказа
+    if current_order:
+        return render_template('order.html', order=current_order)
+    # Если заказа нет, то создаем заказ, позицию заказа и статус позиции заказа = "В корзине"
+    else:
+        flash('Ваша корзина пуста, сначала добавьте товар в корзину')
+        return redirect(url_for('product.catalog'))
+        
+
 @blueprint.route('/order/<product_id>')
-def order_view(product_id):
+def order_change(product_id):
     # Проверяем, есть ли заказ у текущего пользователя?
     current_order = Order.query.join(User).filter(User.id == current_user.id).first()
     # Если заказ есть, то пока просто отображаем страницу заказа
