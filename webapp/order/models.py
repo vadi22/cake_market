@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 class Order(db.Model): 
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), index = True)
+    comment = db.Column(db.String(800))
     user = relationship("User", lazy="joined")
     line = relationship("Order_line", lazy="joined")
     def __repr__(self):
