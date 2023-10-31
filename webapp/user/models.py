@@ -1,7 +1,9 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeSerializer as Serializer
 
 from webapp.db import db
+from webapp import config
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
@@ -19,6 +21,20 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
     
+    def get_token(self):
+         serial= Serializer(config.SECRET_KEY)
+         print(serial.dumps({'user_id':self.id}))
+         return serial.dumps({'user_id':self.id})
+    
+    @staticmethod     
+    def verify_token(token):
+        serial = Serializer(config.SECRET_KEY)
+        try:
+            user_id = serial.loads(token)['user_id']
+        except:
+             return None
+        return User.query.get(user_id)
+         
     @property
     def is_admin(self):
         return self.role == 1 and self.active
