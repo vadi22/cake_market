@@ -1,11 +1,49 @@
 {% extends "base.html" %}
+<!-- totals - необходим для подсчете итоговой суммы заказа
+     ns - это счетчик, показывающий номер строки с товаром в таблице -->
+{% set totals = [] %}
+{% set ns = namespace(c = 0) %}
 {% block content %}
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <h4>Заказ {{ order.id }}</h4>
-      <ul>
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Фото</th>
+            <th scope="col">Товар</th>
+            <th scope="col">Цена </th>
+            <th scope="col">Количество</th>
+            <th scope="col">Стоимость</th>
+          </tr>
+        </thead>
+        <tbody>
+
       {% for line in order.line %}
-        <li>{{ line.product.name }}, {{ line.quantity }} шт., {{ line.total_cost }}</li>
+          {% set ns.c = ns.c + 1 %}
+        <tr>
+          <td scope="row">{{ ns.c }}</td>
+          <td width="10%"><img src="../static/{{ line.product.image.link }}" class="img-fluid img-thumbnail max-width: auto; and height: 100%;"></a></td>
+          <td>
+            <h6>{{ line.product.name }}</h6>
+            <p>{{ line.product.description }}</p>
+          </td>
+          <td>{{ '%0.0f' | format(line.total_cost) }} руб.</td>
+          <td>
+            <div class="form-outline" style="width: 22rem;">
+              <input  name="quantity" value={{line.quantity}} type="number" id="typeNumber" class="form-control" min="1" max="100" />
+            </div>
+          </td>
+          <td>{{ '%0.0f' | format(line.total_cost * line.quantity) }} руб.</td>
+        </tr><!-- END TR-->
+        {% if totals.append(line.total_cost * line.quantity) %}{% endif %}
+
       {% endfor %}
-      </ul>
+      <tr>
+        <td colspan="5" align="right">Итого</td>
+        <td>{{ '%0.0f' | format(totals | sum) }} руб.</td>
+      </tr>
+      </tbody>
+    </table>
 </div>
 {% endblock %}
