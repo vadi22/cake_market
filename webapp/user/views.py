@@ -160,12 +160,12 @@ def reset_token(token):
     print(11)
     if form.validate_on_submit():
         print(1)
-        user.set_password(form.password_new.data)
+        user.set_password(form.password_new_forgot.data)
         db.session.add(user)
         db.session.commit()
         flash('Ваш пароль успешно обновлен', 'success')
-        return redirect(url_for('login'))
-    return render_template('change_password_forgot.html', title = 'Изменение пароля', form=form)
+        return redirect(url_for('user.login'))
+    return render_template('change_password_forgot.html', title = 'Изменение пароля', form=form, token=token)
 
 
 

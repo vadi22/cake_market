@@ -64,7 +64,7 @@ class ResetPassForm(FlaskForm):
         'Введите новый пароль',
         validators=[
             DataRequired(),
-            EqualTo('pass_confirm', message='Пароли не совпадают.')], 
+            EqualTo('pass_confirm_forgot', message='Пароли не совпадают.')], 
         render_kw={'class': 'form-control'},
     )
     pass_confirm_forgot = PasswordField(
