@@ -1,11 +1,14 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from flask_login import login_user, logout_user, current_user, login_required
-
-from webapp.user.forms import LoginForm, RegistrationForm, AddressForm
+from webapp.user.forms import LoginForm, RegistrationForm, AddressForm, ChangePassForm, ForgotPassForm, ResetPassForm
 from webapp.user.models import User, User_adress
 from webapp.db import db
+from flask_mail import Message, Mail
+from webapp import mail
+from webapp.config import MAIL_DEFAULT_SENDER
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
+
 
 @blueprint.route('/login')
 def login():
@@ -91,4 +94,78 @@ def edit_adress():
     db.session.commit()
     flash('Адрес принят')
     return redirect(url_for('user.user_profile', user_id=current_user.id))
+
+@blueprint.route(
+    '/<int:user_id>/change_password',
+    methods=['GET', 'POST'],
+    )
+@login_required
+def change_password(user_id):
+    user = User.query.filter(User.id == user_id).first_or_404()
+    if current_user != user:
+        abort(404)
+    form = ChangePassForm()
+    if form.validate_on_submit():
+        if user.check_password(form.password_old.data):
+            print(user.set_password(form.password_new.data))
+            user.set_password(form.password_new.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Ваш пароль успешно обновлен', 'success')
+            return redirect(url_for('user.user_profile', user_id=user.id))
+        else:
+            flash('Неверный пароль')
+    return render_template(
+        '/change_password.html',
+        form=form,
+        user=user,
+    )
+
+
+def send_mail(user):
+    token = user.get_token()
+    msg = Message('Востановление пароля', recipients=[user.email], sender=MAIL_DEFAULT_SENDER)
+    msg.body = f''' Востановление пароля
+{url_for('user.reset_token', token=token,_external=True)}
+
+
+    '''
+    mail.send(msg)
+
+
+@blueprint.route(
+    '/forgot',
+    methods=['GET', 'POST'],
+    )
+def forgot():
+    form = ForgotPassForm()
+    if form.validate_on_submit():
+        print(1)
+        flash('Проверьте свою почту')
+        user = User.query.filter_by(email=form.email.data).first()
+        print(user)
+        if user:
+            send_mail(user)
+
+    return render_template('forgot.html', form=form)
+
+@blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    user=User.verify_token(token)
+    if user is None:
+        flash('Ошибка')
+        return redirect(url_for('user.forgot'))
     
+    form = ResetPassForm()
+    print(11)
+    if form.validate_on_submit():
+        print(1)
+        user.set_password(form.password_new.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Ваш пароль успешно обновлен', 'success')
+        return redirect(url_for('login'))
+    return render_template('change_password_forgot.html', title = 'Изменение пароля', form=form)
+
+
+
