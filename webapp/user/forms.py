@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, InputRequired
-from webapp.user.models import User, User_adress
+from webapp.user.models import User
 
 
 class LoginForm(FlaskForm):
@@ -64,7 +64,7 @@ class ResetPassForm(FlaskForm):
         'Введите новый пароль',
         validators=[
             DataRequired(),
-            EqualTo('pass_confirm', message='Пароли не совпадают.')], 
+            EqualTo('pass_confirm_forgot', message='Пароли не совпадают.')], 
         render_kw={'class': 'form-control'},
     )
     pass_confirm_forgot = PasswordField(
@@ -76,3 +76,10 @@ class ResetPassForm(FlaskForm):
         'Изменить',
         render_kw={'class': 'btn btn-primary'},
     )
+
+class ReviewForm(FlaskForm):
+    review_text = StringField('Оставить отзыв',
+        validators=[DataRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Отправить',
+        render_kw={"class": "btn btn-primary"})
+    

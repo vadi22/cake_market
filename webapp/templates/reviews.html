@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('index') }}">Назад</a>    
+    <h1>Отзывы:</h1>
+        {% for review in reviews_list %}
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">{{ review.text }}</p>
+                <p class="card-text">
+                    <small>Опубликовано: {{ review.created.strftime('%d.%m.%Y') }} | 
+                        Автор: {{ review.user.email }}</small>
+                </p>
+            </div>
+        {% endfor %}    
+    </div>
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('user.reviews') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.review_text.label }}
+                {{ form.review_text() }}
+            </div>
+            {{ form.submit() }}
+        {% else %}
+                <p><a href="{{ url_for('user.login', next=request.full_path) }}">Авторизуйтесь</a>,
+                    чтобы комментировать</p>
+    {% endif %}    
+        </form>                  
+
+{% endblock %}
