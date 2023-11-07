@@ -1,9 +1,11 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeSerializer as Serializer
-
+from datetime import datetime
+from sqlalchemy.orm import relationship
 from webapp.db import db
 from webapp import config
+
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
@@ -54,3 +56,16 @@ class User_adress(db.Model):
     def __repr__(self):
             return '<User adress id= {} User id={}>'.format(self.id, self.user_id)
         
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'),  index=True) 
+    user = relationship('User', backref='reviews')
+ 
+
+
+
+    def __repr__(self):
+        return '<Review {}>'.format(self.id)
