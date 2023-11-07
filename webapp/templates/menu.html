@@ -6,10 +6,14 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <ul class="navbar-nav mr-auto">
-      <a class="nav-item nav-link active" href="{{ url_for('index')}}">Главная страница </a>
-      <a class="nav-item nav-link active" href="{{ url_for('product.catalog')}}">Каталог </a>
+      <a class="nav-item nav-link active" href="{{ url_for('index')}}">Главная страница</a>
+      <a class="nav-item nav-link active" href="{{ url_for('product.catalog')}}">Каталог</a>
       <!-- Корзина пока ведет на все заказы, но нужна функция поиска активного заказа пользователя или создание нового заказа. -->
-      <a class="nav-item nav-link active" href="{{ url_for('order.order_view')}}">Корзина</a>
+      {% if current_user.is_admin %}
+        <a class="nav-item nav-link active" href="{{ url_for('order.orders')}}">Заказы</a>
+      {% else %}
+        <a class="nav-item nav-link active" href="{{ url_for('order.order_view')}}">Корзина</a>
+      {% endif %}
       <!-- Конец исправления. -->
     </ul>
     <ul class="navbar-nav my-2 my-lg-0">
