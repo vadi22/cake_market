@@ -4,9 +4,12 @@
 {% set totals = [] %}
 {% set ns = namespace(c = 0) %}
 {% block content %}
+<form method="POST">
 <div class="row row-cols-1 row-cols-md-2 g-4">
-  <h4>Заказ {{ order.id }}</h4>
-      <table class="table table-striped table-bordered">
+
+  <h4>Корзина заказа {{ order.id }}</h4>
+      <table class="table table-striped table-bordered table-hover table-sm table-responsive">
+        <!-- <caption>Заказ {{ order.id }} Пользователь {{ order.user.id }} </caption> -->
         <thead>
           <tr>
             <th scope="col">№</th>
@@ -20,24 +23,28 @@
         <tbody>
 
       {% for line in order.line %}
+      {% if line.line_status[-1].status_id == 1 %}
           {% set ns.c = ns.c + 1 %}
         <tr>
-          <td scope="row">{{ ns.c }}</td>
-          <td width="10%"><img src="../static/{{ line.product.image.link }}" class="img-fluid img-thumbnail max-width: auto; and height: 100%;"></a></td>
+          <th scope="row">{{ ns.c }}</th>
+          <td width="15%">
+            <a href="/product/{{ line.product.id }}">
+              <img src="../static/{{ line.product.image.link }}"  class="img-fluid img-thumbnail max-width: auto; and height: 100%;"></a></td>
           <td>
             <h6>{{ line.product.name }}</h6>
             <p>{{ line.product.description }}</p>
+            <!-- <p>{{line.line_status[-1].status.name}}</p> -->
           </td>
           <td>{{ '%0.0f' | format(line.total_cost) }} руб.</td>
           <td>
-            <div class="form-outline" style="width: 22rem;">
-              <input  name="quantity" value={{line.quantity}} type="number" id="typeNumber" class="form-control" min="1" max="100" />
+            <div class="form-outline" style="width: 4rem;">
+              <input  name="new_quantity.{{line.quantity}}.{{line.id}}" value={{line.quantity}} type="number" id="typeNumber" class="form-control" min="0" max="10" />
             </div>
           </td>
           <td>{{ '%0.0f' | format(line.total_cost * line.quantity) }} руб.</td>
         </tr><!-- END TR-->
         {% if totals.append(line.total_cost * line.quantity) %}{% endif %}
-
+        {% endif %}
       {% endfor %}
       <tr>
         <td colspan="5" align="right">Итого</td>
@@ -45,5 +52,8 @@
       </tr>
       </tbody>
     </table>
+    <button class="btn btn-outline-secondary" type="submit">Пересчитать</button>
+    <button class="btn btn-outline-secondary" type="submit">Оформить заказ</button>
 </div>
+</form>
 {% endblock %}
