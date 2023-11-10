@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean(), default = True )
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     telegram_id = db.Column(db.String(120), index = True, unique = True)
+    address = relationship("User_adress", lazy="joined")
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

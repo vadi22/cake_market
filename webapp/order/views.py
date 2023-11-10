@@ -28,14 +28,14 @@ def order_create(product_id):
     # Считаем стоимость продукта
     product_cost = summ_product_cost(product_id)
     # После выполнения db.session.commit() в модели появляется id записи, его сразу же можго использовать: print(order.id)
-    product = Order_line(
+    order_line = Order_line(
         order_id=order.id, product_id=product_id, quantity=1, total_cost=product_cost
     )
-    db.session.add(product)
+    db.session.add(order_line)
     db.session.commit()
     # Устанавливаем статус на позицию, статус "В корзине"
     # Решил что пусть будет лишний раз обновляться статус
-    line_status = Line_status(line_id=order.id, datetime=datetime.now(), status_id=1)
+    line_status = Line_status(line_id=order_line.id, datetime=datetime.now(), status_id=1)
     db.session.add(line_status)
     db.session.commit()
 
@@ -112,34 +112,48 @@ def order_view():
             )
             return redirect(url_for("product.catalog"))
     if request.method == "POST":
+        print(request.form)
         try:
             # Изменение количества в корзине
-            for key in request.form:
-                if key.startswith("new_quantity."):
-                    id_ = key.split(".")[-1]
-                    old_quantity = int(key.split(".")[-2])
-                    try:
-                        value = int(request.form[key])
-                        # Если новое кол-во равно нулю, то количество в заказе снижаем до нуля, ставим статус 4 (удалено)
-                        if value == 0:
-                            flash(f"Позиция удалена")
-                            order_line = db.session.query(Order_line).get(id_)
-                            order_line.quantity = value
-                            db.session.commit()
-                            line_status = Line_status(
-                                line_id=id_, datetime=datetime.now(), status_id=4
-                            )
-                            db.session.add(line_status)
-                            db.session.commit()
-                        # Если новое кол-во просто отличается от старого, то меняем количество, статус не меняем.
-                        elif old_quantity != value:
-                            flash(f"Заказ пересчитан")
-                            order_line = db.session.query(Order_line).get(id_)
-                            order_line.quantity = value
-                            db.session.commit()
-                    except:
-                        pass
-            return redirect(url_for("order.order_view"))
+
+            if request.form.get("submit_order"):
+                return redirect(url_for("order.order_view"))
+            if request.form.get("recalculate"):
+                for key in request.form:
+                    if key.startswith("new_quantity."):
+                        id_ = key.split(".")[-1]
+                        old_quantity = int(key.split(".")[-2])
+                        print(f"id {id_} old_quantity {old_quantity} key {key}")
+                        try:
+                            value = int(request.form[key])
+                            # Если новое кол-во равно нулю, то количество в заказе снижаем до нуля, ставим статус 4 (удалено)
+                            if value == 0:
+                                flash(f"Позиция удалена")
+                                order_line = db.session.query(Order_line).get(id_)
+                                order_line.quantity = value
+                                db.session.commit()
+                                line_status = Line_status(
+                                    line_id=id_, datetime=datetime.now(), status_id=4
+                                )
+                                db.session.add(line_status)
+                                db.session.commit()
+                            # Если новое кол-во просто отличается от старого, то меняем количество, статус не меняем.
+                            elif old_quantity != value:
+                                flash(f"Заказ пересчитан")
+                                order_line = db.session.query(Order_line).get(id_)
+                                order_line.quantity = value
+                                db.session.commit()
+                        except:
+                            pass
+                return redirect(url_for("order.order_view"))
+
+            if request.form.get("submit_comment"):
+                print(request.form["comment"])
+                print(request.form["submit_comment"])
+                order = db.session.query(Order).get(int(request.form["submit_comment"]))
+                order.comment = request.form["comment"]
+                db.session.commit()
+                return redirect(url_for("order.order_view"))
         except AttributeError:
             flash("Вы не авторизованы для данной операции")
             return redirect(url_for("product.catalog"))

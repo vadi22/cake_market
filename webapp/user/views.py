@@ -78,16 +78,13 @@ def process_reg():
 def user_profile(user_id):
     user = User.query.filter(User.id == user_id).first_or_404()
     adress = User_adress.query.filter(User_adress.user_id == user_id).first()
-    print(current_user.id)
-    print(current_user.is_admin)
-    print(current_user == user)
     if current_user.is_admin or current_user == user:
-        return render_template(
-            "user_profile.html",
-            user=user,
-            page_title="Личный кабинет",
-            adress=adress,
-        )
+            return render_template(
+                "user_profile.html",
+                user=user,
+                page_title="Личный кабинет",
+                adress=adress,
+            )
     else:
         flash("Вы не авторизованы для данной операции")
         # Тут можно настроить возврат к предыдущему окну, а не на главную.
