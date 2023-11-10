@@ -14,7 +14,8 @@
             {% endif %}
         </div>
         <div class='col-4'>
-            <a href="{{ url_for('user.edit_profile', user_id=user.id) }}" class="btn btn-light btn-sm" role="button">Изменить адрес доставки</a>
+            <a href="{{ url_for('user.edit_profile', user_id=user.id) }}" class="btn btn-light btn-sm" role="button">Изменить адрес доставки</a><br /><br />
+            <a href="{{ url_for('user.change_password', user_id=user.id) }}" class="btn btn-light btn-sm" role="button">Изменить пароль</a>
         </div>
     </div>
 {% endblock %}

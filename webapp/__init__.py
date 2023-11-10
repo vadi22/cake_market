@@ -1,22 +1,26 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_mail import Mail
 
 from webapp.db import db
 from webapp.user.models import User
-from webapp.user.views import blueprint as user_blueprint
-from webapp.admin.views import blueprint as admin_blueprint
-from webapp.product.views import blueprint as product_blueprint
-from webapp.order.views import blueprint as order_blueprint
 
+
+mail = Mail()
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
+    mail.init_app(app)
     migrate = Migrate(app, db)
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'login'
+    from webapp.user.views import blueprint as user_blueprint
+    from webapp.admin.views import blueprint as admin_blueprint
+    from webapp.product.views import blueprint as product_blueprint
+    from webapp.order.views import blueprint as order_blueprint
     app.register_blueprint(product_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(admin_blueprint)

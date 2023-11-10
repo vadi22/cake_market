@@ -1,5 +1,7 @@
 from webapp.db import db
 from sqlalchemy.orm import relationship
+from datetime import datetime
+from webapp.user.models import User
 
 class Labor(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -75,3 +77,19 @@ class Product_Component(db.Model):
 #     image_id =db.Column(db.Integer, db.ForeignKey(Image.id), index = True, nullable = False)
 #     def __repr__(self):
 #         return '<Component_Image id={}>'.format(self.id)
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'),  index=True) 
+    product_id = db.Column(db.Integer, db.ForeignKey(Product.id, ondelete='CASCADE'),  index=True)
+    product = relationship('Product', backref='comments')
+    user = relationship('User', backref='comments')
+ 
+
+
+
+    def __repr__(self):
+        return '<Comment {}>'.format(self.id)
