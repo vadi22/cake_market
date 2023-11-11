@@ -42,7 +42,7 @@
       </div>
 
         <p>
-          <a href="{{ url_for('product.catalog')}}"><img src="../static/img/1.jpg" width="200" height="222" alt="ПОПУЛЯРНОЕ"></a>
+          <a href="{{ url_for('product.catalog') }}"><img src="../static/img/1.jpg" width="200" height="222" alt="ПОПУЛЯРНОЕ"></a>
         </p> 
     </div>
     <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
@@ -51,7 +51,7 @@
         <p class="lead">Нам есть чем вас порадовать.</p>
       </div>
       <p>
-        <a href="{{ url_for('product.catalog')}}"><img src="../static/img/2.jpg" width="180" height="222" alt="АКЦИИ"></a>
+        <a href="{{ url_for('product.catalog') }}"><img src="../static/img/2.jpg" width="180" height="222" alt="АКЦИИ"></a>
       </p>
     </div>   
     <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
@@ -60,7 +60,7 @@
         <p class="lead">Собери чудо сам.</p>
       </div>
       <p>
-        <a href="{{ url_for('product.catalog')}}"><img src="../static/img/3.jpg" width="200" height="222" alt="КОНСТРУКТОР"></a>
+        <a href="{{ url_for('product.catalog') }}"><img src="../static/img/3.jpg" width="200" height="222" alt="КОНСТРУКТОР"></a>
       </p>
     </div>
   </div>
@@ -76,24 +76,24 @@
   <div class="col-6 col-md">
     <h5>КАТАЛОГ ПРОДУКЦИИ</h5>
     <ul class="list-unstyled text-small">
-      <li><a class="link-secondary text-decoration-none" href="#">Каталог</a></li>
-      <li><a class="link-secondary text-decoration-none" href="#">Новинки</a></li>
-      <li><a class="link-secondary text-decoration-none" href="#">Скидки и акции</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Каталог</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Новинки</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Скидки и акции</a></li>
     </ul>
   </div>
   <div class="col-6 col-md">
     <h5>О МАГАЗИНЕ</h5>
     <ul class="list-unstyled text-small">
-      <li><a class="link-secondary text-decoration-none" href="{{ url_for('user.reviews')}}">Отзывы</a></li>
-      <li><a class="link-secondary text-decoration-none" href="#">Вопросы / ответы</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('user.reviews') }}">Отзывы</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('user.reviews') }}">Вопросы / ответы</a></li>
     </ul>
   </div>
   <div class="col-6 col-md">
     <h5>ДЛЯ ПОКУПАТЕЛЕЙ</h5>
     <ul class="list-unstyled text-small">
-      <li><a class="link-secondary text-decoration-none" href="#">Как заказать</a></li>
-      <li><a class="link-secondary text-decoration-none" href="#">Оплата</a></li>
-      <li><a class="link-secondary text-decoration-none" href="#">Доставка</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Как заказать</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Оплата</a></li>
+      <li><a class="link-secondary text-decoration-none" href="{{ url_for('product.catalog') }}">Доставка</a></li>
     </ul>
   </div>
 </div>

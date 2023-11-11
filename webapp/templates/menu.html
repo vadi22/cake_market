@@ -22,14 +22,14 @@
         <a class="nav-link" href="{{ url_for('user.user_profile', user_id=current_user.id)}}">Профиль</a>
       </li>
       <li class="nav-item my-2 my-sm-0">
-        <a class="nav-link" href="{{ url_for('user.logout')}}">Выйти из профиля</a>
+        <a class="nav-link" href="{{ url_for('user.logout', next=request.full_path)}}">Выйти из профиля</a>
       </li>
       {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('user.login')}}">Войти в профиль</a>
+        <a class="nav-link" href="{{ url_for('user.login', next=request.full_path)}}">Войти в профиль</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('user.register')}}">Регистрация</a>
+        <a class="nav-link" href="{{ url_for('user.register', next=request.full_path)}}">Регистрация</a>
       </li>
       
       {% endif %}

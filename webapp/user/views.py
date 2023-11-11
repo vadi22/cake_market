@@ -14,7 +14,7 @@ blueprint = Blueprint("user", __name__, url_prefix="/users")
 @blueprint.route('/login')
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(get_redirect_target())
     title = "Авторизация"
     login_form = LoginForm()
     return render_template("login.html", page_title=title, form=login_form)
@@ -28,7 +28,7 @@ def process_login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             flash("Вы вошли на сайт")
-            return redirect(url_for("index"))
+            return redirect(get_redirect_target())
     flash("Неправильное имя пользователя или пароль")
     return redirect(url_for("user.login"))
 
@@ -95,12 +95,14 @@ def user_profile(user_id):
 @login_required
 def edit_profile(user_id):
     user = User.query.filter(User.id == user_id).first_or_404()
+    adress = User_adress.query.filter(User_adress.user_id == user_id).first()
     if current_user != user:
         abort(404)
     form = AddressForm()
     return render_template(
         "edit_profile.html",
         form=form,
+        adress=adress
     )
 
 
