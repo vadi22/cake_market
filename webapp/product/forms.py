@@ -3,7 +3,7 @@ from wtforms import HiddenField, StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
 from webapp.product.models import Product
 class CommentForm(FlaskForm):
-    product_id = HiddenField('ID новости', validators=[DataRequired()])
+    product_id = HiddenField('ID продукта', validators=[DataRequired()])
     comment_text = StringField('Текст комментария',
         validators=[DataRequired()], render_kw={"class": "form-control"})
     submit = SubmitField('Отправить',
