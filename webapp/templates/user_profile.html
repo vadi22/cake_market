@@ -7,7 +7,7 @@
             <h3>{{ user.email }}</h3>
             <br />
             <h3>Адрес доставки:</h3>
-            {% if adress %}
+            {% if adress.city != '-' %}
                 <h4>г. {{ adress.city }}, р-он {{ adress.district }}, ул. {{ adress.street }}, д. {{ adress.home }}, кв. {{ adress.apartment }}</h4>
             {% else %}
                 <h4>Укажите адрес доствки</h4>
