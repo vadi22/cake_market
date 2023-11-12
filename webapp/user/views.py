@@ -54,15 +54,13 @@ def process_reg():
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(email=form.email.data)
-        new_user.set_password(form.password.data)
-        adress = User_adress(user_id=new_user.id)       
+        new_user.set_password(form.password.data)    
         db.session.add(new_user)
         db.session.commit()
         adress = User_adress(user_id=new_user.id)
         db.session.add(adress)
         db.session.commit()
         flash("Вы успешно зарегистрировались!")
-
         return redirect(url_for("user.login"))
     else:
         for field, errors in form.errors.items():
