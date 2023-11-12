@@ -46,11 +46,11 @@ class User(db.Model, UserMixin):
 
 class User_adress(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    city = db.Column(db.String(120))
-    district = db.Column(db.String(120))
-    street = db.Column(db.String(120))
-    home = db.Column(db.String(120))
-    apartment = db.Column(db.String(120))
+    city = db.Column(db.String(120), default = '-')
+    district = db.Column(db.String(120), default = '-')
+    street = db.Column(db.String(120), default = '-')
+    home = db.Column(db.String(120), default = '-')
+    apartment = db.Column(db.String(120), default = '-')
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), index=True)
 
     def __repr__(self):
