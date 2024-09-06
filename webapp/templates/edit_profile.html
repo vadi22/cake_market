@@ -3,6 +3,12 @@
 {% block content %}
     <div class='row'>
         <div class='col-4'>
+            Текущей адрес:
+            {% if adress.city != '-' %}
+                <h4>г. {{ adress.city }}, р-он {{ adress.district }}, ул. {{ adress.street }}, д. {{ adress.home }}, кв. {{ adress.apartment }}</h4>
+            {% else %}
+                <h4>Укажите адрес доствки</h4>
+            {% endif %}
         </div>
         <div class='col-8'>
             <form action="{{ url_for('user.edit_adress') }}" method="POST">
@@ -10,23 +16,23 @@
  
                 <div class='form-group'>
                     {{ form.city.label }}
-                    {{ form.city() }}
+                    <input class="form-control" id="city" name="city" required type="text" value={{ adress.city }}>
                 </div>
                 <div class='form-group'>
                     {{ form.district.label }}
-                    {{ form.district() }}
+                    <input class="form-control" id="district" name="district" required type="text" value={{ adress.district }}>
                 </div>
                 <div class='form-group'>
                     {{ form.street.label }}
-                    {{ form.street() }}
+                    <input class="form-control" id="street" name="street" required type="text" value={{ adress.street }}>
                 </div>
                 <div class='form-group'>
                     {{ form.home.label }}
-                    {{ form.home() }}
+                    <input class="form-control" id="home" name="home" required type="text" value={{ adress.home }}>
                 </div>
                 <div class='form-group'>
                     {{ form.apartment.label }}
-                    {{ form.apartment() }}
+                    <input class="form-control" id="apartment" name="apartment" required type="text" value={{ adress.apartment }}>
                 </div>
                 {{ form.submit() }}
             </form>
@@ -36,7 +42,8 @@
                
         </div>
     </div>
-        </div>  
+        </div>
+  
 {% endblock %}
         
 

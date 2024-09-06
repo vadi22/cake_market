@@ -4,15 +4,13 @@
     {% for product in products %}
         <div class="col">
             <div class="card" style="width: 18rem;">
-                {% for image in product.product_images %}
-
-                    <img src="../static/{{ image.images.link }}" class="card-img-top" alt="..."></a>
-                {% endfor %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <!-- <p class="card-text">{{ product.description }}</p> -->
-                    <a href="/product/{{ product.id }}" class="btn btn-primary">Подробнее</a>
-                </div>
+                <img src="../static/{{ product.image.link }}" class="card-img-top" alt="..."></a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <!-- <p class="card-text">{{ product.description }}</p> -->
+                        <a href="/product/{{ product.id }}" class="btn btn-primary">Подробнее</a>
+                        <a href="/order/{{ product.id }}" class="btn btn-primary">В корзину</a>
+                    </div>
             </div><br>
         </div>
         <br>

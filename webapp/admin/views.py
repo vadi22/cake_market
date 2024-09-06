@@ -5,7 +5,7 @@ from flask_admin import Admin
 from webapp.db import db
 from webapp.admin import AdminView, MyAdminIndexView
 from webapp.user.models import User
-from webapp.product.models import Product, Component, Image, Price, Labor, Product_Component, Product_Image, Component_Image
+from webapp.product.models import Product, Component, Image, Price, Labor, Product_Component
 
 blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -25,5 +25,3 @@ admin.add_view(AdminView(Image, db.session))
 admin.add_view(AdminView(Price, db.session))
 admin.add_view(AdminView(Labor, db.session))
 admin.add_view(AdminView(Product_Component, db.session))
-admin.add_view(AdminView(Product_Image, db.session))
-admin.add_view(AdminView(Component_Image, db.session))

@@ -1,15 +1,19 @@
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #b7abd1;">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7adf5;">
   <a class="navbar-brand" href="#">ТОРТИКИ</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <ul class="navbar-nav mr-auto">
-      <a class="nav-item nav-link active" href="{{ url_for('index')}}">Главная страница </a>
-      <a class="nav-item nav-link active" href="{{ url_for('product.catalog')}}">Каталог </a>
+      <a class="nav-item nav-link active" href="{{ url_for('index')}}">Главная страница</a>
+      <a class="nav-item nav-link active" href="{{ url_for('product.catalog')}}">Каталог</a>
       <!-- Корзина пока ведет на все заказы, но нужна функция поиска активного заказа пользователя или создание нового заказа. -->
-      <a class="nav-item nav-link active" href="{{ url_for('order.orders')}}">Корзина</a>
+      {% if current_user.is_admin %}
+        <a class="nav-item nav-link active" href="{{ url_for('order.orders')}}">Заказы</a>
+      {% else %}
+        <a class="nav-item nav-link active" href="{{ url_for('order.order_view')}}">Корзина</a>
+      {% endif %}
       <!-- Конец исправления. -->
     </ul>
     <ul class="navbar-nav my-2 my-lg-0">
@@ -18,14 +22,14 @@
         <a class="nav-link" href="{{ url_for('user.user_profile', user_id=current_user.id)}}">Профиль</a>
       </li>
       <li class="nav-item my-2 my-sm-0">
-        <a class="nav-link" href="{{ url_for('user.logout')}}">Выйти из профиля</a>
+        <a class="nav-link" href="{{ url_for('user.logout', next=request.full_path)}}">Выйти из профиля</a>
       </li>
       {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('user.login')}}">Войти в профиль</a>
+        <a class="nav-link" href="{{ url_for('user.login', next=request.full_path)}}">Войти в профиль</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('user.register')}}">Регистрация</a>
+        <a class="nav-link" href="{{ url_for('user.register', next=request.full_path)}}">Регистрация</a>
       </li>
       
       {% endif %}

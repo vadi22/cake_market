@@ -1,15 +1,78 @@
 {% extends "base.html" %}
+<!-- totals - необходим для подсчете итоговой суммы заказа
+     ns - это счетчик, показывающий номер строки с товаром в таблице -->
+{% set totals = [] %}
+{% set ns = namespace(c = 0) %}
 {% block content %}
-      <h4>Заказ {{ order.id }}</h4>
-          <div class='col-12'>
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-              <div class="alert alert-warning" role="alert">
-                {% for message in messages %}
-                  {{ message }}<br>
-                {% endfor %}
-              </div>
-              {% endif %}
-            {% endwith %}
-        </div>
+<form method="POST">
+
+  <h4>Корзина заказа {{ order.id }}</h4>
+      <table class="table table-striped table-bordered table-hover table-sm table-responsive">
+        <!-- <caption>Заказ {{ order.id }} Пользователь {{ order.user.id }} </caption> -->
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Фото</th>
+            <th scope="col">Товар</th>
+            <th scope="col">Цена </th>
+            <th scope="col">Количество</th>
+            <th scope="col">Стоимость</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      {% for line in order.line %}
+      {% if line.line_status[-1].status_id == 1 %}
+          {% set ns.c = ns.c + 1 %}
+        <tr>
+          <th scope="row">{{ ns.c }}</th>
+          <td width="15%">
+            <a href="/product/{{ line.product.id }}">
+              <img src="../static/{{ line.product.image.link }}"
+                class="img-fluid img-thumbnail max-width: auto; and height: 100%;"></a>
+          </td>
+          <td>
+            <h6>{{ line.product.name }}</h6>
+            <p>{{ line.product.description }}</p>
+            <!-- <p>{{line.line_status[-1].status.name}}</p> -->
+          </td>
+          <td>{{ '%0.0f' | format(line.total_cost) }} руб.</td>
+          <td>
+            <div class="form-outline" style="width: 4rem;">
+              <input name="new_quantity.{{line.quantity}}.{{line.id}}" value={{line.quantity}} type="number"
+                id="typeNumber" class="form-control" min="0" max="10" />
+            </div>
+            <button class="btn btn-outline-secondary" name="recalculate" value="recalculate" type="submit">ОК</button>
+          </td>
+          <td>{{ '%0.0f' | format(line.total_cost * line.quantity) }} руб.</td>
+        </tr><!-- END TR-->
+        {% if totals.append(line.total_cost * line.quantity) %}{% endif %}
+        {% endif %}
+        {% endfor %}
+        <tr>
+          <td colspan="5" align="right">Итого</td>
+          <td>{{ '%0.0f' | format(totals | sum) }} руб.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <button class="btn btn-outline-secondary" name="recalculate" value="recalculate" type="submit">Пересчитать</button>
+    </div>
+    <div class="form-group">
+      <h6>Адрес доставки</h6><a href="/users/{{ order.user.id }}/edit_profile">Изменить</a>
+    <p class="text-break">{{ order.user.address[0].city }}, {{ order.user.address[0].district }}, улица {{
+      order.user.address[0].street }}
+      дом {{ order.user.address[0].home }} кв. {{ order.user.address[0].apartment }}
+    </p>
+  </div>
+    <div class="form-group">
+      <label for="comment">Комментарий к заказу</label>
+      <textarea class="form-control" name="comment" placeholder="comment">{{ order.comment }}</textarea>
+      <button class="btn btn-outline-secondary" name="submit_comment" value="{{ order.id }}" type="submit">Сохранить комментарий</button>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-outline-secondary" name="submit_order" value="{{ order.id }}" type="submit">Оформить заказ</button>
+    </div>
+
+</form>
 {% endblock %}

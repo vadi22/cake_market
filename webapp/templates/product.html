@@ -12,9 +12,9 @@
               </div>
               {% endif %}
             {% endwith %}
-          {% for image in images %}
-            <img src="../static/{{ image.link }}" class="img-fluid max-width: 100%; height: auto;"></a>
-          {% endfor %}<br><br>
+          
+          <img src="../static/{{ product.image.link }}" class="img-fluid max-width: 100%; height: auto;"></a>
+
           <h5>{{ product.description }}</h5>
           <h5>Время изготовления (часов): {{ production_time }}</h5>
           <p>
@@ -33,6 +33,34 @@
             </div>
           </div>
           <h4>Цена {{ product_cost }} рублей</h4>
+          <a href="/order/{{ product.id }}" class="btn btn-primary">Добавить в корзину</a>
 
+          {% if product.comments %}
+            <h3>Комментарии:</h3>
+              {% for comment in product.comments %}
+              <div class="card">
+                  <div class="card-body">
+                      <p class="card-text">{{ comment.text }}</p>
+                      <p class="card-text">
+                          <small>Опубликовано: {{ comment.created.strftime('%d.%m.%Y') }} | 
+                              Автор: {{ comment.user.email }}</small>
+                      </p>
+                  </div>
+            </div>
+            {% endfor %}
+          {% endif %}
+          {% if current_user.is_authenticated %}
+            <form action="{{ url_for('product.add_comment') }}" method="POST">
+              {{ form.hidden_tag() }}
+              <div class="form-group">
+                  {{ form.comment_text.label }}
+                  {{ form.comment_text() }}
+              </div>
+              {{ form.submit() }}
+            </form>
+            {% else %}
+              <p><a href="{{ url_for('user.login', next=request.full_path) }}">Авторизуйтесь</a>,
+                    чтобы комментировать</p>
+          {% endif %}          
         </div>
 {% endblock %}
