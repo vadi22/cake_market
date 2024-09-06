@@ -20,7 +20,7 @@
 
 ## Модели проекта
 
-![Структура данных](https://putilkovo.shn-host.ru/DB_cake_market.jpg)
+![Структура данных](https://putilych.shn-host.ru/DB_cake_market.jpg)
 
 ## Создание и управление миграцией
 
